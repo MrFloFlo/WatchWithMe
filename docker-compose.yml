@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: node server.js
+    depends_on:
+      - firefox
+
+  firefox:
+    image: jlesage/firefox
+    ports:
+      - "5800:5800" # noVNC web UI
+    environment:
+      - VNC_PASSWORD=password
+    volumes:
+      - firefox-data:/config
+
+volumes:
+  firefox-data:

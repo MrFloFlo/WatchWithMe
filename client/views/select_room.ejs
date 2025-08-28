@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Select Room</title>
+  <link href="/css/style.css" rel="stylesheet" />
+  <style>
+    .room-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .room-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+      width: 180px;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      user-select: none;
+    }
+    .room-box:hover {
+      box-shadow: 0 0 12px rgba(0,0,0,0.2);
+    }
+    .room-name {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 8px;
+    }
+    .user-count {
+      color: #555;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome, <%= username %>!</h2>
+
+    <form id="createRoomForm">
+      <input type="text" id="roomName" placeholder="New Room Name" required />
+      <button type="submit">Create Room</button>
+    </form>
+
+    <h3>Join an existing room:</h3>
+    <div class="room-grid">
+      <% rooms.forEach(room => { %>
+        <a href="/rooms/<%= room.id %>" class="room-box">
+          <div class="room-name"><%= room.name %></div>
+          <div class="user-count"><%= room.users.length %> user<%= room.users.length !== 1 ? 's' : '' %></div>
+        </a>
+      <% }) %>
+    </div>
+
+    <form method="POST" action="/logout">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/select_room.js"></script>
+</body>
+</html>

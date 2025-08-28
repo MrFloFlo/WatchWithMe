@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Room: <%= room.name %>
+    </title>
+    <link href="/css/style.css" rel="stylesheet" />
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: sans-serif;
+        }
+
+        h2 {
+            margin: 8px 16px;
+        }
+
+        #mainContent {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        #videoContainer {
+            flex: 1;
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #videoPlayer,
+        #dockerFrame {
+            max-width: 100%;
+            max-height: 100%;
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+
+        #chatContainer {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #ccc;
+            background: #fafafa;
+            height: 100%;
+        }
+
+        #messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        #chatInput {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        #chatInput input {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #chatInput button {
+            margin-left: 8px;
+            padding: 6px 14px;
+            font-size: 14px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        #chatInput button:hover {
+            background-color: #0056b3;
+        }
+
+        #controlBar {
+            height: 60px;
+            background: #eee;
+            border-top: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 12px;
+            user-select: none;
+        }
+
+        #controlBar button {
+            padding: 8px 14px;
+            font-size: 14px;
+            border: 1px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #controlBar button:hover {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>
+        Room: <%= room.name %> &nbsp;|&nbsp;
+            Host: <span id="hostName" style="color:#007bff; font-weight:bold;">
+                <%= host %>
+            </span>
+            &nbsp;|&nbsp; You: <%= username %>
+    </h2>
+
+
+    <div id="mainContent">
+        <div id="videoContainer">
+            <% if (room.type==='video' ) { %>
+                <video id="videoPlayer" controls>
+                    <source src="<%= room.videoUrl %>" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <% } else if (room.type==='docker' ) { %>
+                    <iframe id="dockerFrame" src="http://localhost:<%= room.dockerPort %>" allowfullscreen></iframe>
+                    <% } %>
+        </div>
+
+        <div id="chatContainer">
+            <div id="messages"></div>
+            <div id="chatInput">
+                <input id="chatMsg" type="text" placeholder="Say something..." />
+                <button onclick="sendChat()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="controlBar">
+        <button id="btnRequestHost">Request Host</button>
+        <button id="btnUploadVideo">Watch Uploaded Video</button>
+        <button id="btnYoutubeVideo">Watch YouTube Video</button>
+        <button id="btnDockerBrowser">Switch to Docker Browser</button>
+    </div>
+
+    <script>
+        const username = "<%= username %>";
+        const roomId = "<%= room.id %>";
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/showroom.js"></script>
+</body>
+
+</html>
